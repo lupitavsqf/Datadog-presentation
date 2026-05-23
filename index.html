@@ -3,273 +3,304 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>SVG GENERATOR</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
 <style>
+  :root {
+    --bg: #0e0e10;
+    --surface: #17171a;
+    --surface2: #1f1f24;
+    --border: rgba(255,255,255,0.07);
+    --accent: #6c63ff;
+    --accent2: #FFD700;
+    --text: #f0f0f4;
+    --muted: #888898;
+    --radius: 20px;
+  }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-body{
-    background:#1a1a1a;
-    color:white;
-    font-family:Arial, sans-serif;
-    padding:50px;
-}
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-.container{
-    max-width:1000px;
-    margin:auto;
-}
+  /* Subtle grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(108, 99, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(108, 99, 255, 0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
 
-h1{
-    font-size:64px;
-    text-align:center;
-    margin-bottom:30px;
-}
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
 
-h2{
-    margin-bottom:15px;
-}
+  /* ─── HEADER ─────────────────────────────────── */
+  .header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
 
-.card{
-    background:#252525;
-    border-radius:18px;
-    padding:30px;
-    margin-bottom:30px;
+  .header .eyebrow {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(108,99,255,0.4);
+    padding: 5px 14px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+    animation: fadeUp 0.6s ease both;
+  }
 
-    box-shadow:
-        0 10px 30px rgba(0,0,0,.35);
-}
+  .header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(52px, 10vw, 88px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    background: linear-gradient(135deg, #fff 40%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
 
-.team{
-    font-size:22px;
-    line-height:1.8;
-}
+  .header .subtitle {
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
 
-.svg-container{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
+  /* ─── CARDS ──────────────────────────────────── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s ease both;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
 
-.image-container{
-    text-align:center;
-}
+  .card:hover {
+    border-color: rgba(108, 99, 255, 0.3);
+    box-shadow: 0 0 40px rgba(108, 99, 255, 0.06);
+  }
 
-.image-container img{
-    max-width:100%;
-    border-radius:12px;
-}
+  .card:nth-child(1) { animation-delay: 0.25s; }
+  .card:nth-child(2) { animation-delay: 0.35s; }
+  .card:nth-child(3) { animation-delay: 0.45s; }
+  .card:nth-child(4) { animation-delay: 0.55s; }
 
-.video-container{
-    position:relative;
-    overflow:hidden;
-    border-radius:12px;
-}
+  .card-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    font-family: 'Space Mono', monospace;
+  }
 
-.video-container iframe{
-    width:100%;
-    height:500px;
-    border:none;
-}
+  .card-label::before {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.7;
+  }
 
+  /* ─── TEAM CARD ──────────────────────────────── */
+  .team-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .team-names {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .name-tag {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 22px;
+    font-size: 15px;
+    letter-spacing: 0.03em;
+    color: var(--text);
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .name-tag:hover {
+    background: rgba(108,99,255,0.1);
+    border-color: rgba(108,99,255,0.35);
+  }
+
+  /* ─── SVG & CONTENT CENTERS ──────────────────── */
+  .svg-container,
+  .image-container,
+  .video-container-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .svg-container svg,
+  .team-body svg {
+    filter: drop-shadow(0 8px 32px rgba(108,99,255,0.2));
+    border-radius: 12px;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* ─── IMAGE ──────────────────────────────────── */
+  .image-container img {
+    max-width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+
+  /* ─── VIDEO ──────────────────────────────────── */
+  .video-wrapper {
+    position: relative;
+    width: 100%;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+
+  .video-wrapper iframe {
+    width: 100%;
+    height: 440px;
+    border: none;
+    display: block;
+  }
+
+  /* ─── DIVIDER ─────────────────────────────────── */
+  .divider {
+    width: 48px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+
+  /* ─── ANIMATIONS ─────────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 </style>
 </head>
-
 <body>
 
 <div class="container">
 
-    <!-- TITLE -->
+  <!-- HEADER -->
+  <div class="header">
+    <div class="eyebrow">Final Project</div>
+    <h1>SVG Generator</h1>
+    <p class="subtitle">CS · Spring 2025</p>
+  </div>
 
-    <h1>SVG GENERATOR</h1>
+  <!-- TEAM -->
+  <div class="card">
+    <div class="card-label">Team Members</div>
+    <div class="team-body">
 
-    <!-- TEAM -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="320" height="214" viewBox="0 0 600 400">
+        <rect width="600" height="400" fill="#0B3D91"/>
+        <path d="M300 80 L420 160 L420 280 L300 360 L180 280 L180 160 Z"
+              fill="white" stroke="#08306B" stroke-width="5"/>
+        <text x="300" y="180" font-family="Arial Black, Arial, sans-serif"
+              font-size="72" fill="#0B3D91" font-weight="bold"
+              text-anchor="middle" dominant-baseline="middle">SVG</text>
+        <text x="300" y="260" font-family="Arial Black, Arial, sans-serif"
+              font-size="36" fill="#0B3D91" letter-spacing="6" font-weight="bold"
+              text-anchor="middle" dominant-baseline="middle">HEROES</text>
+        <polygon points="300,50 312,85 350,85 318,110 330,145 300,125 270,145 282,110 250,85 288,85" fill="#FFD700"/>
+        <polygon points="200,200 210,215 230,215 215,225 220,245 200,235 180,245 185,225 170,215 190,215" fill="#FFD700"/>
+        <polygon points="400,200 410,215 430,215 415,225 420,245 400,235 380,245 385,225 370,215 390,215" fill="#FFD700"/>
+      </svg>
 
-    <div class="card">
+      <div class="team-names">
+        <div class="name-tag">Lupita Vásquez Fabela</div>
+        <div class="name-tag">Sri Dasari</div>
+      </div>
 
-        <h2>Team Members</h2>
-        
-<div class="center team-logo">
+    </div>
+  </div>
 
-<svg
-xmlns="http://www.w3.org/2000/svg"
-width="600"
-height="400"
-viewBox="0 0 600 400"
->
+  <!-- ANIMATED SVG -->
+  <div class="card">
+    <div class="card-label">Animated SVG</div>
+    <div class="svg-container">
+      <svg xmlns="http://www.w3.org/2000/svg" width="480" height="300" viewBox="0 0 600 400">
+        <text x="150" y="200" font-family="Arial" font-size="120" fill="#6c63ff">
+          S
+          <animate attributeName="y" values="200;160;200" dur="0.5s" repeatCount="indefinite"/>
+        </text>
+        <text x="350" y="200" font-family="Arial" font-size="120" fill="#4ade80">
+          L
+          <animate attributeName="y" values="200;160;200" dur="0.3s" repeatCount="indefinite"/>
+        </text>
+      </svg>
+    </div>
+  </div>
 
-<rect width="600" height="400" fill="#0B3D91"/>
+  <!-- IMAGE -->
+  <div class="card">
+    <div class="card-label">Image</div>
+    <div class="image-container">
+      <img src="datadog.png" alt="Datadog">
+    </div>
+  </div>
 
-<path
-d="M300 80
-L420 160
-L420 280
-L300 360
-L180 280
-L180 160
-Z"
-
-fill="white"
-stroke="#08306B"
-stroke-width="5"
-/>
-
-<text
-x="300"
-y="180"
-font-family="Arial Black, Arial, sans-serif"
-font-size="72"
-fill="#0B3D91"
-font-weight="bold"
-text-anchor="middle"
-dominant-baseline="middle">
-
-SVG
-
-</text>
-
-<text
-x="300"
-y="260"
-font-family="Arial Black, Arial, sans-serif"
-font-size="36"
-fill="#0B3D91"
-letter-spacing="6"
-font-weight="bold"
-text-anchor="middle"
-dominant-baseline="middle">
-
-HEROES
-
-</text>
-
-<polygon
-points="300,50 312,85 350,85 318,110 330,145 300,125 270,145 282,110 250,85 288,85"
-fill="#FFD700"
-/>
-
-<polygon
-points="200,200 210,215 230,215 215,225 220,245 200,235 180,245 185,225 170,215 190,215"
-fill="#FFD700"
-/>
-
-<polygon
-points="400,200 410,215 430,215 415,225 420,245 400,235 380,245 385,225 370,215 390,215"
-fill="#FFD700"
-/>
-
-</svg>
+  <!-- VIDEO -->
+  <div class="card">
+    <div class="card-label">Project Video</div>
+    <div class="video-wrapper">
+      <iframe src="https://www.youtube.com/embed/cCcEM16hXSM" allowfullscreen></iframe>
+    </div>
+  </div>
 
 </div>
-
-        <div class="team">
-            Lupita Vásquez Fabela<br>
-            Sri Dasari
-        </div>
-
-    </div>
-
-    <!-- SVG -->
-
-    <div class="card">
-
-        <h2>Animated SVG</h2>
-
-        <div class="svg-container">
-
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="600"
-                height="400"
-                viewBox="0 0 600 400"
-            >
-
-                <text
-                    x="150"
-                    y="200"
-                    font-family="Arial"
-                    font-size="120"
-                    fill="blue"
-                >
-                    S
-
-                    <animate
-                        attributeName="y"
-                        values="200;160;200"
-                        dur="0.5s"
-                        repeatCount="indefinite"
-                    />
-
-                </text>
-
-
-                <text
-                    x="350"
-                    y="200"
-                    font-family="Arial"
-                    font-size="120"
-                    fill="green"
-                >
-                    L
-
-                    <animate
-                        attributeName="y"
-                        values="200;160;200"
-                        dur="0.3s"
-                        repeatCount="indefinite"
-                    />
-
-                </text>
-
-            </svg>
-
-        </div>
-
-    </div>
-
-    <!-- IMAGE -->
-
-    <div class="card">
-
-        <h2>Image</h2>
-
-        <div class="image-container">
-
-            <img
-                src="datadog.png"
-                alt="Datadog"
-            >
-
-        </div>
-
-    </div>
-
-    <!-- VIDEO -->
-
-    <div class="card">
-
-        <h2>Project Video</h2>
-
-        <div class="video-container">
-
-            <!-- Replace VIDEO_ID -->
-
-            <iframe
-                src="https://www.youtube.com/embed/cCcEM16hXSM" 
-                allowfullscreen>
-            </iframe>
-
-        </div>
-
-    </div>
-
-</div>
-
 </body>
 </html>
